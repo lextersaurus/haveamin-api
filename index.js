@@ -3,12 +3,14 @@ const morgan = require('morgan')
 const express = require('express') 
 const sequelize = require('./db') 
 const dbSync = require('./db/sync') 
+const createRelationships = require('./db/relationship')
 
 const api = express()
 
 const dbCheck = async () => {
     try {
         await sequelize.authenticate() 
+        createRelationships()
         await dbSync() 
         console.log('Connected to Haveamin DB')
     } catch (error) {
