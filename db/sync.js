@@ -1,7 +1,9 @@
+const UserModel = require('../api/models/user.model')
+
 const dbSync = async () => {
     try{
-        
-         console.log('DB Sync succesful')
+        //await UserModel.sync()
+        console.log('DB Sync succesful')
 
     }catch(err){
         throw new Error(error)

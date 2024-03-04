@@ -20,8 +20,7 @@ api.use(express.json())
 
 api.get('/', (req, res) => res.send('Connected to Haveamin API'))
 
-//Rutas api
-//api.use('/api', require('./api/routes'))
+api.use('/api', require('./api/routes'))
 
 api.listen(process.env.PORT, async (err) => {
     if (err) throw new Error('Cannot star API')
