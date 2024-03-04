@@ -21,6 +21,30 @@ const signup = async (req, res) => {
     }
 }
 
+const login = async (req, res) => {
+    try {
+        const user = await UserModel.findOne({
+            where: {
+                email: req.body.email
+            }
+        })
+
+        if (!user) return res.status(500).send('Email or password incorrect')
+
+        if (!bcrypt.compareSync(req.body.password, user.password)) return res.status(500).send('Email or password incorrect')
+
+        const token = jwt.sign({
+            email: user.email
+        }, process.env.JWT_SECRET)
+
+        res.status(200).json({ token })
+    } catch (error) {
+        console.log(error)
+        res.status(500).send('Error loggin up')
+    } 
+}
+
 module.exports = {
-    signup
+    signup,
+    login
 }
