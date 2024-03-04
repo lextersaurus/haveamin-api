@@ -10,7 +10,7 @@ const dbCheck = async () => {
     try {
         await sequelize.authenticate() 
         await dbSync() 
-        console.log('Connected to Guaguas DB')
+        console.log('Connected to Haveamin DB')
     } catch (error) {
         throw new Error(error)
     }
@@ -18,7 +18,7 @@ const dbCheck = async () => {
 api.use(morgan('dev')) 
 api.use(express.json())
 
-api.get('/', (req, res) => res.send('Connected to haveamin API'))
+api.get('/', (req, res) => res.send('Connected to Haveamin API'))
 
 //Rutas api
 //api.use('/api', require('./api/routes'))
