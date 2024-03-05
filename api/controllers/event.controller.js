@@ -1,13 +1,15 @@
 const EventModel = require('../models/event.model')
+const UserModel = require('../models/user.model')
+
 
 const getEvents = async (req, res) => {
-    try{
+    try {
         const events = await EventModel.findAll()
         res.status(200).json(events)
 
-    }catch(error){
- console.log(error)
- res.status(500).send('error gettin events')
+    } catch (error) {
+        console.log(error)
+        res.status(500).send('error gettin events')
     }
 }
 const getOneEvent = async (req, res) => {
@@ -23,7 +25,7 @@ const getOneEvent = async (req, res) => {
     }
 }
 const createEvent = async (req, res) => {
-    try{
+    try {
         const event = req.body
 
         res.locals.event = event
@@ -32,13 +34,13 @@ const createEvent = async (req, res) => {
         await EventModel.create(event)
 
         res.status(200).json(event)
-    }catch(error){
- console.log(error)
- res.status(500).send('error creating event')
+    } catch (error) {
+        console.log(error)
+        res.status(500).send('error creating event')
     }
 }
 
-const updateEvent = async(req, res) => {
+const updateEvent = async (req, res) => {
     try {
         const selectedEvent = await EventModel.findByPk(req.params.id)
         if (res.locals.user.id !== selectedEvent.userId) return res.status(401).send('User not authorized')
@@ -50,7 +52,10 @@ const updateEvent = async(req, res) => {
             },
         })
         if (eventExist !== 0) {
-            return res.status(200).json({ message: 'event updated', event })
+            return res.status(200).json({
+                message: 'event updated',
+                event
+            })
         } else {
             return res.status(404).send('Event not found')
         }
@@ -59,11 +64,11 @@ const updateEvent = async(req, res) => {
     }
 }
 
-const deleteEvent = async(req, res) => {
+const deleteEvent = async (req, res) => {
     try {
         const selectedEvent = await EventModel.findByPk(req.params.id)
         if (res.locals.user.id !== selectedEvent.userId && res.locals.user.role !== 'admin') return res.status(401).send('User not authorized')
-        
+
         const event = await EventModel.destroy({
             where: {
                 id: req.params.id,
@@ -79,10 +84,46 @@ const deleteEvent = async(req, res) => {
     }
 }
 
+const joinEvent = async (req, res) => {
+    try {
+        const event = await EventModel.findByPk(req.params.id)
+        const user = await UserModel.findByPk(res.locals.user.id)
+        await event.addUser(user)
+       
+        if (event) {
+            return res.status(200).json('Event joined')
+        } else {
+            return res.status(404).send('Event not found')
+        }
+
+    } catch (error) {
+        return res.status(500).send(error.message)
+    }
+}
+const quitEvent = async (req, res) => {
+    try {
+        const event = await EventModel.findByPk(req.params.id)
+        const user = await UserModel.findByPk(res.locals.user.id)
+        await event.removeUser(user)
+       
+        if (event) {
+            return res.status(200).json('Event quit')
+        } else {
+            return res.status(404).send('Event not found')
+        }
+
+    } catch (error) {
+        return res.status(500).send(error.message)
+    }
+}
+
+
 module.exports = {
     getEvents,
     getOneEvent,
     createEvent,
     updateEvent,
-    deleteEvent
+    deleteEvent,
+    joinEvent,
+    quitEvent
 }
