@@ -1,13 +1,13 @@
 const UserModel = require('../models/user.model')
 
 const getUsers = async (req, res) => {
-    try{
+    try {
         const users = await UserModel.findAll()
         res.status(200).json(users)
 
-    }catch(error){
- console.log(error)
- res.status(500).send('Error gettin users')
+    } catch (error) {
+        console.log(error)
+        res.status(500).send('Error gettin users')
     }
 }
 
@@ -24,7 +24,7 @@ const getOneUser = async (req, res) => {
     }
 }
 
-const updateUser = async(req, res) => {
+const updateUser = async (req, res) => {
     try {
         const selectedUser = await UserModel.findByPk(req.params.id)
         if (res.locals.user.id !== selectedUser.id && res.locals.user.role !== 'admin') return res.status(401).send('User not authorized')
@@ -45,7 +45,7 @@ const updateUser = async(req, res) => {
     }
 }
 
-const deleteUser = async(req, res) => {
+const deleteUser = async (req, res) => {
     try {
         const selectedUser = await UserModel.findByPk(req.params.id)
         if (res.locals.user.id !== selectedUser.id && res.locals.user.role !== 'admin') return res.status(401).send('User not authorized')
@@ -65,9 +65,27 @@ const deleteUser = async(req, res) => {
     }
 }
 
+const getUserEvents = async (req, res) => {
+    try {
+        const user = await UserModel.findOne({
+            where: {
+                id: req.params.userId,
+            }
+        })
+        const events = await user.getEvents({ joinTableAttributes: [] })
+
+        res.json(events)
+
+    } catch (error) {
+        return res.status(500).send(error.message)
+
+    }
+}
+
 module.exports = {
     getUsers,
     getOneUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    getUserEvents
 }
