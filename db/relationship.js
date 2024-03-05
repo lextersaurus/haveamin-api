@@ -10,6 +10,9 @@ const createRelationships = () => {
 
     EventModel.belongsToMany(CategoryModel, { through: Event_Category })
     CategoryModel.belongsToMany(EventModel, { through: Event_Category })
+
+    UserModel.hasMany(EventModel)
+    EventModel.belongsTo(UserModel)
 }
 
 module.exports = createRelationships

@@ -7,11 +7,11 @@ const User_Event = require('../api/models/user_event.model')
 
 const dbSync = async () => {
     try{
-        //await UserModel.sync()
-        //await CategoryModel.sync()
-        //await EventModel.sync()
-        //await Event_Category.sync()
-        //await User_Event.sync()
+      /*   await UserModel.sync()
+        await CategoryModel.sync()
+        await EventModel.sync()
+        await Event_Category.sync()
+        await User_Event.sync() */
         console.log('DB Sync succesful')
 
     }catch(err){
