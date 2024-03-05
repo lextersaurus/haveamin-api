@@ -24,9 +24,14 @@ const getOneEvent = async (req, res) => {
 }
 const createEvent = async (req, res) => {
     try{
-        const event = await EventModel.create(req.body)
-        res.status(200).json(event)
+        const event = req.body
 
+        res.locals.event = event
+        event.userId = res.locals.user.id
+
+        await EventModel.create(event)
+
+        res.status(200).json(event)
     }catch(error){
  console.log(error)
  res.status(500).send('error creating event')
@@ -35,6 +40,9 @@ const createEvent = async (req, res) => {
 
 const updateEvent = async(req, res) => {
     try {
+        const selectedEvent = await EventModel.findByPk(req.params.id)
+        if (res.locals.user.id !== selectedEvent.userId) return res.status(401).send('User not authorized')
+
         const [eventExist, event] = await EventModel.update(req.body, {
             returning: true,
             where: {
@@ -53,6 +61,9 @@ const updateEvent = async(req, res) => {
 
 const deleteEvent = async(req, res) => {
     try {
+        const selectedEvent = await EventModel.findByPk(req.params.id)
+        if (res.locals.user.id !== selectedEvent.userId && res.locals.user.role !== 'admin') return res.status(401).send('User not authorized')
+        
         const event = await EventModel.destroy({
             where: {
                 id: req.params.id,

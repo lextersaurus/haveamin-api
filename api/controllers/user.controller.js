@@ -26,6 +26,9 @@ const getOneUser = async (req, res) => {
 
 const updateUser = async(req, res) => {
     try {
+        const selectedUser = await UserModel.findByPk(req.params.id)
+        if (res.locals.user.id !== selectedUser.id && res.locals.user.role !== 'admin') return res.status(401).send('User not authorized')
+
         const [userExist, user] = await UserModel.update(req.body, {
             returning: true,
             where: {
@@ -44,6 +47,9 @@ const updateUser = async(req, res) => {
 
 const deleteUser = async(req, res) => {
     try {
+        const selectedUser = await UserModel.findByPk(req.params.id)
+        if (res.locals.user.id !== selectedUser.id && res.locals.user.role !== 'admin') return res.status(401).send('User not authorized')
+
         const user = await UserModel.destroy({
             where: {
                 id: req.params.id,
