@@ -3,13 +3,13 @@ const EventModel = require('../models/event.model')
 
 
 const getCategories = async (req, res) => {
-    try{
+    try {
         const categories = await CategoryModel.findAll()
         res.status(200).json(categories)
 
-    }catch(error){
- console.log(error)
- res.status(500).send('Error gettin categories')
+    } catch (error) {
+        console.log(error)
+        res.status(500).send('Error gettin categories')
     }
 }
 const getOneCategory = async (req, res) => {
@@ -25,17 +25,17 @@ const getOneCategory = async (req, res) => {
     }
 }
 const createCategory = async (req, res) => {
-    try{
+    try {
         const category = await CategoryModel.create(req.body)
         res.status(200).json(category)
 
-    }catch(error){
- console.log(error)
- res.status(500).send('Error creating category')
+    } catch (error) {
+        console.log(error)
+        res.status(500).send('Error creating category')
     }
 }
 
-const updateCategory = async(req, res) => {
+const updateCategory = async (req, res) => {
     try {
         const [categoryExist, category] = await CategoryModel.update(req.body, {
             returning: true,
@@ -44,7 +44,10 @@ const updateCategory = async(req, res) => {
             },
         })
         if (categoryExist !== 0) {
-            return res.status(200).json({ message: 'Category updated', category })
+            return res.status(200).json({
+                message: 'Category updated',
+                category
+            })
         } else {
             return res.status(404).send('Category not found')
         }
@@ -53,7 +56,7 @@ const updateCategory = async(req, res) => {
     }
 }
 
-const deleteCategory = async(req, res) => {
+const deleteCategory = async (req, res) => {
     try {
         const category = await CategoryModel.destroy({
             where: {
@@ -74,8 +77,9 @@ const addEventCategory = async (req, res) => {
     try {
         const event = await EventModel.findByPk(req.params.eventId)
         const category = await CategoryModel.findByPk(req.params.categoryId)
+        if (res.locals.user.id !== event.userId && res.locals.user.role !== 'admin') return res.status(401).send('User not authorized')
         await event.addCategory(category)
-       
+
         if (event) {
             return res.status(200).json('Event added to category')
         } else {
@@ -90,8 +94,9 @@ const quitEventCategory = async (req, res) => {
     try {
         const event = await EventModel.findByPk(req.params.eventId)
         const category = await CategoryModel.findByPk(req.params.categoryId)
+        if (res.locals.user.id !== event.userId && res.locals.user.role !== 'admin') return res.status(401).send('User not authorized')
         await event.removeCategory(category)
-       
+
         if (event) {
             return res.status(200).json('Event deleted from category')
         } else {
