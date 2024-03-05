@@ -7,7 +7,10 @@ const User_Event = sequelize.define(
         status: {
             type: DataTypes.STRING,
             defaultValue: "Accepted",
-            allowNull: false
+            allowNull: false,
+            validate: {
+                isIn: [['Accepted', 'Pending', 'Rejected']]
+            }
         },
        rating: {
             type: DataTypes.INTEGER,

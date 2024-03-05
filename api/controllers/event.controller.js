@@ -62,7 +62,7 @@ const updateEvent = async(req, res) => {
 const deleteEvent = async(req, res) => {
     try {
         const selectedEvent = await EventModel.findByPk(req.params.id)
-        if (res.locals.user.id !== selectedEvent.userId) return res.status(401).send('User not authorized')
+        if (res.locals.user.id !== selectedEvent.userId && res.locals.user.role !== 'admin') return res.status(401).send('User not authorized')
         
         const event = await EventModel.destroy({
             where: {
