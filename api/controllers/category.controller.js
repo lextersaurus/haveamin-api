@@ -108,6 +108,24 @@ const quitEventCategory = async (req, res) => {
     }
 }
 
+const getCategoryEvents = async (req, res) => {
+    try {
+        const category = await CategoryModel.findOne({
+            where: {
+                id: req.params.categoryId,
+            }
+        })
+        const events = await category.getEvents({ joinTableAttributes: [] })
+
+        res.json(events)
+
+    } catch (error) {
+        return res.status(500).send(error.message)
+
+    }
+}
+
+
 module.exports = {
     getCategories,
     getOneCategory,
@@ -115,5 +133,6 @@ module.exports = {
     updateCategory,
     deleteCategory,
     addEventCategory,
-    quitEventCategory
+    quitEventCategory,
+    getCategoryEvents
 }
