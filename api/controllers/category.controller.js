@@ -1,4 +1,6 @@
 const CategoryModel = require('../models/category.model')
+const EventModel = require('../models/event.model')
+
 
 const getCategories = async (req, res) => {
     try{
@@ -68,10 +70,45 @@ const deleteCategory = async(req, res) => {
     }
 }
 
+const addEventCategory = async (req, res) => {
+    try {
+        const event = await EventModel.findByPk(req.params.eventId)
+        const category = await CategoryModel.findByPk(req.params.categoryId)
+        await event.addCategory(category)
+       
+        if (event) {
+            return res.status(200).json('Event added to category')
+        } else {
+            return res.status(404).send('Event not found')
+        }
+
+    } catch (error) {
+        return res.status(500).send(error.message)
+    }
+}
+const quitEventCategory = async (req, res) => {
+    try {
+        const event = await EventModel.findByPk(req.params.eventId)
+        const category = await CategoryModel.findByPk(req.params.categoryId)
+        await event.removeCategory(category)
+       
+        if (event) {
+            return res.status(200).json('Event deleted from category')
+        } else {
+            return res.status(404).send('Event not found')
+        }
+
+    } catch (error) {
+        return res.status(500).send(error.message)
+    }
+}
+
 module.exports = {
     getCategories,
     getOneCategory,
     createCategory,
     updateCategory,
-    deleteCategory
+    deleteCategory,
+    addEventCategory,
+    quitEventCategory
 }
