@@ -67,7 +67,7 @@ const deleteUser = async (req, res) => {
 
 const getUserEvents = async (req, res) => {
     try {
-        const user = await UserModel.findOne({
+        const user = await UserModel.findOne({ //utilizar res.locals.user
             where: {
                 id: req.params.userId,
             }

@@ -1,5 +1,6 @@
 const EventModel = require('../models/event.model')
 const UserModel = require('../models/user.model')
+const { Op } = require('sequelize')
 
 
 const getEvents = async (req, res) => {
@@ -117,6 +118,38 @@ const quitEvent = async (req, res) => {
     }
 }
 
+const searchEvent = async (req, res) => {
+    try {
+        const searchTerm = req.body.search
+        console.log(searchTerm)
+        if (!Object.values(searchTerm).length) {
+            const events = await EventModel.findAll()
+
+            if (events) {
+                return res.status(200).json(events)
+            } else {
+                return res.status(404).send('No events found')
+            }
+        } else {
+            const events = await EventModel.findAll({
+                where: {
+                    name: {
+                        [Op.like]: `%${searchTerm}%`
+                    }
+                }
+            })
+
+            if (events.length) {
+                return res.status(200).json(events)
+              } else {
+                return res.status(404).send('No matches found')
+              }
+        }
+    } catch (error) {
+        return res.status(500).send(error.message)
+    }
+}
+
 
 module.exports = {
     getEvents,
@@ -125,5 +158,6 @@ module.exports = {
     updateEvent,
     deleteEvent,
     joinEvent,
-    quitEvent
+    quitEvent,
+    searchEvent
 }
