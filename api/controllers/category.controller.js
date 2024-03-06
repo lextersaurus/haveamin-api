@@ -27,6 +27,8 @@ const getOneCategory = async (req, res) => {
 
 const createCategory = async (req, res) => {
     try {
+        if (res.locals.user.role !== 'admin') return res.status(401).send('User not authorized')
+
         const category = await CategoryModel.create(req.body)
 
         res.status(200).json(category)
@@ -37,6 +39,8 @@ const createCategory = async (req, res) => {
 
 const updateCategory = async (req, res) => {
     try {
+        if (res.locals.user.role !== 'admin') return res.status(401).send('User not authorized')
+
         const [categoryExist, category] = await CategoryModel.update(req.body, {
             returning: true,
             where: {
@@ -59,6 +63,8 @@ const updateCategory = async (req, res) => {
 
 const deleteCategory = async (req, res) => {
     try {
+        if (res.locals.user.role !== 'admin') return res.status(401).send('User not authorized')
+
         const category = await CategoryModel.destroy({
             where: {
                 id: req.params.id
