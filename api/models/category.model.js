@@ -1,14 +1,12 @@
 const { DataTypes } = require('sequelize')
 const sequelize = require('../../db')
 
-const CategoryModel = sequelize.define(
-    'category',
+const CategoryModel = sequelize.define('category',
     {
         name: {
             type: DataTypes.STRING,
-            allowNull: false,
-        },
-       
+            allowNull: false
+        }
     },
     { timestamps: false }
 )

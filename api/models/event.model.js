@@ -1,12 +1,11 @@
 const { DataTypes } = require('sequelize')
 const sequelize = require('../../db')
 
-const EventModel = sequelize.define(
-    'event',
+const EventModel = sequelize.define('event',
     {
         name: {
             type: DataTypes.STRING,
-            allowNull: false,
+            allowNull: false
         },
         place: {
             type: DataTypes.STRING,
@@ -22,14 +21,14 @@ const EventModel = sequelize.define(
         },
         ageMax: {
             type: DataTypes.INTEGER,
-            allowNull: false,
+            allowNull: false
         },
         isAccessible: {
             type: DataTypes.BOOLEAN,
         },
         isFree: {
             type: DataTypes.BOOLEAN,
-            allowNull: false,
+            allowNull: false
         }
     },
     { timestamps: false }

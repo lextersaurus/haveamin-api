@@ -1,12 +1,11 @@
 const { DataTypes } = require('sequelize')
 const sequelize = require('../../db')
 
-const User_Event = sequelize.define(
-    'user_event',
+const User_Event = sequelize.define('user_event',
     {
         status: {
             type: DataTypes.STRING,
-            defaultValue: "Accepted",
+            defaultValue: 'Accepted',
             allowNull: false,
             validate: {
                 isIn: [['Accepted', 'Pending', 'Rejected']]

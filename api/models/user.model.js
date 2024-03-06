@@ -1,12 +1,11 @@
 const { DataTypes } = require('sequelize')
 const sequelize = require('../../db')
 
-const UserModel = sequelize.define(
-    'user',
+const UserModel = sequelize.define('user',
     {
         name: {
             type: DataTypes.STRING,
-            allowNull: false,
+            allowNull: false
         },
         lastName: {
             type: DataTypes.STRING,
@@ -40,12 +39,11 @@ const UserModel = sequelize.define(
         },
         age: {
             type: DataTypes.INTEGER,
-            allowNull: false,
+            allowNull: false
         },
         country: {
             type: DataTypes.STRING,
-        },
-
+        }
     },
     { timestamps: false }
 )
