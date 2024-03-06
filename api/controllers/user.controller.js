@@ -6,11 +6,11 @@ const getUsers = async (req, res) => {
         const users = await UserModel.findAll({
             attributes: { exclude: ['id', 'email', 'password', 'role'] }
         })
-        res.status(200).json(users)
 
+        res.status(200).json(users)
     } catch (error) {
         console.log(error)
-        res.status(500).send('Error gettin users')
+        res.status(500).send('Error getting users')
     }
 }
 
@@ -38,10 +38,11 @@ const updateUser = async (req, res) => {
         const [userExist, user] = await UserModel.update(req.body, {
             returning: true,
             where: {
-                id: req.params.id,
-            },
+                id: req.params.id
+            }
         })
-        if (userExist !== 0) {
+
+        if (userExist) {
             return res.status(200).json({ message: 'User updated', user })
         } else {
             return res.status(404).send('User not found')
@@ -58,8 +59,8 @@ const deleteUser = async (req, res) => {
 
         const user = await UserModel.destroy({
             where: {
-                id: req.params.id,
-            },
+                id: req.params.id
+            }
         })
         if (user) {
             return res.status(200).json('User deleted')
@@ -73,18 +74,11 @@ const deleteUser = async (req, res) => {
 
 const getUserEvents = async (req, res) => {
     try {
-        const user = await UserModel.findOne({ //utilizar res.locals.user
-            where: {
-                id: req.params.userId,
-            }
-        })
-        const events = await user.getEvents({ joinTableAttributes: [] })
+        const events = await res.locals.user.getEvents({ joinTableAttributes: [] })
 
         res.json(events)
-
     } catch (error) {
         return res.status(500).send(error.message)
-
     }
 }
 

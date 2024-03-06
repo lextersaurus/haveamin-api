@@ -5,8 +5,6 @@ const sequelize = require('./db')
 const dbSync = require('./db/sync') 
 const createRelationships = require('./db/relationship')
 
-const api = express()
-
 const dbCheck = async () => {
     try {
         await sequelize.authenticate() 
@@ -17,18 +15,16 @@ const dbCheck = async () => {
         throw new Error(error)
     }
 }
-api.use(morgan('dev')) 
-api.use(express.json())
 
-api.get('/', (req, res) => res.send('Connected to Haveamin API'))
-
-api.use('/api', require('./api/routes'))
-
-api.listen(process.env.PORT, async (err) => {
-    if (err) throw new Error('Cannot star API')
+const api = express()
+    .use(morgan('dev')) 
+    .use(express.json())
+    .get('/', (req, res) => res.send('Connected to Haveamin API'))
+    .use('/api', require('./api/routes'))
+    .listen(process.env.PORT, async (err) => {
+    if (err) throw new Error('Cannot start API')
     console.log('*'.repeat(50))
-    console.log(`Haveamin API Running on port ${process.env.PORT}`)
+    console.log(`Haveamin API running on port ${process.env.PORT}`)
     await dbCheck()
     console.log('*'.repeat(50))
-
-})
+    })

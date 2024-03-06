@@ -11,6 +11,4 @@ router.put('/:categoryId/add/:eventId', addEventCategory)
 router.delete('/:categoryId/quit/:eventId', quitEventCategory)
 router.get('/:categoryId/events', getCategoryEvents)
 
-
-
 module.exports = router

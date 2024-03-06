@@ -2,20 +2,20 @@ const EventModel = require('../models/event.model')
 const UserModel = require('../models/user.model')
 const { Op } = require('sequelize')
 
-
 const getEvents = async (req, res) => {
     try {
         const events = await EventModel.findAll()
-        res.status(200).json(events)
 
+        res.status(200).json(events)
     } catch (error) {
-        console.log(error)
-        res.status(500).send('error gettin events')
+        res.status(500).send('Error getting events')
     }
 }
+
 const getOneEvent = async (req, res) => {
     try {
         const event = await EventModel.findByPk(req.params.id)
+
         if (event) {
             return res.status(200).json(event)
         } else {
@@ -25,19 +25,19 @@ const getOneEvent = async (req, res) => {
         res.status(500).send(error.message)
     }
 }
+
 const createEvent = async (req, res) => {
     try {
-        const event = req.body
-
-        res.locals.event = event
-        event.userId = res.locals.user.id
+        const event = {
+            ...req.body,
+            userId: res.locals.user.id,
+        }
 
         await EventModel.create(event)
 
         res.status(200).json(event)
     } catch (error) {
-        console.log(error)
-        res.status(500).send('error creating event')
+        res.status(500).send('Error creating event')
     }
 }
 
@@ -49,12 +49,13 @@ const updateEvent = async (req, res) => {
         const [eventExist, event] = await EventModel.update(req.body, {
             returning: true,
             where: {
-                id: req.params.id,
-            },
+                id: req.params.id
+            }
         })
-        if (eventExist !== 0) {
+
+        if (eventExist) {
             return res.status(200).json({
-                message: 'event updated',
+                message: 'Event updated',
                 event
             })
         } else {
@@ -72,9 +73,10 @@ const deleteEvent = async (req, res) => {
 
         const event = await EventModel.destroy({
             where: {
-                id: req.params.id,
-            },
+                id: req.params.id
+            }
         })
+
         if (event) {
             return res.status(200).json('Event deleted')
         } else {
@@ -96,11 +98,11 @@ const joinEvent = async (req, res) => {
         } else {
             return res.status(404).send('Event not found')
         }
-
     } catch (error) {
         return res.status(500).send(error.message)
     }
 }
+
 const quitEvent = async (req, res) => {
     try {
         const event = await EventModel.findByPk(req.params.id)
@@ -112,7 +114,6 @@ const quitEvent = async (req, res) => {
         } else {
             return res.status(404).send('Event not found')
         }
-
     } catch (error) {
         return res.status(500).send(error.message)
     }
@@ -121,7 +122,7 @@ const quitEvent = async (req, res) => {
 const searchEvent = async (req, res) => {
     try {
         const searchTerm = req.body.search
-        console.log(searchTerm)
+
         if (!Object.values(searchTerm).length) {
             const events = await EventModel.findAll()
 
@@ -149,7 +150,6 @@ const searchEvent = async (req, res) => {
         return res.status(500).send(error.message)
     }
 }
-
 
 module.exports = {
     getEvents,
