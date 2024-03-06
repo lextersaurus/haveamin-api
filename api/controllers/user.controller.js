@@ -1,4 +1,5 @@
 const UserModel = require('../models/user.model')
+const bcrypt = require('bcrypt')
 
 const getUsers = async (req, res) => {
     try {
@@ -82,10 +83,26 @@ const getUserEvents = async (req, res) => {
     }
 }
 
+const createUser = async (req, res) => {
+    try {
+        if (res.locals.user.role !== 'admin') return res.status(401).send('User not authorized')
+        const salt = bcrypt.genSaltSync(parseInt(process.env.BCRYPT_SALT))
+        req.body.password = bcrypt.hashSync(req.body.password, salt)
+
+        const user = await UserModel.create(req.body)
+
+        res.status(200).json(user)
+    } catch (error) {
+        console.log(error)
+        res.status(500).send('Error creating user')
+    }
+}
+
 module.exports = {
     getUsers,
     getOneUser,
     updateUser,
     deleteUser,
-    getUserEvents
+    getUserEvents,
+    createUser
 }
