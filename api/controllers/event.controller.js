@@ -35,7 +35,7 @@ const createEvent = async (req, res) => {
 
         await EventModel.create(event)
 
-        res.status(200).json(event)
+        res.status(200).json('Event created')
     } catch (error) {
         res.status(500).send('Error creating event')
     }
