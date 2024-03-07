@@ -48,7 +48,7 @@ const updateCategory = async (req, res) => {
             }
         })
 
-        if (categoryExist) {
+        if (categoryExist !== 0) {
             return res.status(200).json({
                 message: 'Category updated',
                 category

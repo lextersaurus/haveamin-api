@@ -53,7 +53,7 @@ const updateEvent = async (req, res) => {
             }
         })
 
-        if (eventExist) {
+        if (eventExist !==0) {
             return res.status(200).json({
                 message: 'Event updated',
                 event
