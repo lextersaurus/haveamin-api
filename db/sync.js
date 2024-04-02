@@ -13,7 +13,7 @@ const dbSync = async () => {
         await User_Event.sync()
 
         console.log('DB Sync succesful')
-    }catch(err){
+    }catch(error){
         throw new Error(error)
     }
 }

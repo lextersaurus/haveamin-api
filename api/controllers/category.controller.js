@@ -84,13 +84,14 @@ const deleteCategory = async (req, res) => {
 const addEventCategory = async (req, res) => {
     try {
         const event = await EventModel.findByPk(req.params.eventId)
-        const category = await CategoryModel.findByPk(req.params.categoryId)
-
-        if (res.locals.user.id !== event.userId && res.locals.user.role !== 'admin') return res.status(401).send('User not authorized')
-        await event.addCategory(category)
-
+        
         if (event) {
-            return res.status(200).json('Event added to category')
+            const category = await CategoryModel.findByPk(req.params.categoryId)
+
+            if (res.locals.user.id !== event.userId && res.locals.user.role !== 'admin') return res.status(401).send('User not authorized')
+            await event.addCategory(category)
+
+            return res.status(200).send('Event added to category')
         } else {
             return res.status(404).send('Event not found')
         }
@@ -102,12 +103,13 @@ const addEventCategory = async (req, res) => {
 const quitEventCategory = async (req, res) => {
     try {
         const event = await EventModel.findByPk(req.params.eventId)
-        const category = await CategoryModel.findByPk(req.params.categoryId)
-
-        if (res.locals.user.id !== event.userId && res.locals.user.role !== 'admin') return res.status(401).send('User not authorized')
-        await event.removeCategory(category)
 
         if (event) {
+            const category = await CategoryModel.findByPk(req.params.categoryId)
+
+            if (res.locals.user.id !== event.userId && res.locals.user.role !== 'admin') return res.status(401).send('User not authorized')
+            await event.removeCategory(category)
+
             return res.status(200).json('Event deleted from category')
         } else {
             return res.status(404).send('Event not found')

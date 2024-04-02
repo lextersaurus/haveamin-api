@@ -1,4 +1,5 @@
 require('dotenv').config()
+const cors = require('cors')
 const morgan = require('morgan') 
 const express = require('express') 
 const sequelize = require('./db') 
@@ -17,6 +18,7 @@ const dbCheck = async () => {
 }
 
 const api = express()
+    .use(cors())
     .use(morgan('dev')) 
     .use(express.json())
     .get('/', (req, res) => res.send('Connected to Haveamin API'))

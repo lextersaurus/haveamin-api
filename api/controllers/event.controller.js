@@ -90,11 +90,12 @@ const deleteEvent = async (req, res) => {
 const joinEvent = async (req, res) => {
     try {
         const event = await EventModel.findByPk(req.params.id)
-        const user = await UserModel.findByPk(res.locals.user.id)
-        await event.addUser(user)
-       
+
         if (event) {
-            return res.status(200).json('Event joined')
+            const user = await UserModel.findByPk(res.locals.user.id)
+            await event.addUser(user)
+            
+            return res.status(200).send('Event joined')
         } else {
             return res.status(404).send('Event not found')
         }
