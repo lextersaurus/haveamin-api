@@ -157,6 +157,24 @@ const searchEvent = async (req, res) => {
     }
 }
 
+const getCreatedEvents = async (req, res) => {
+    try {
+        const events = await EventModel.findAll({
+            where: {
+                userId: req.params.userId
+            }
+        })
+
+        if (events.length !== 0) {
+            return res.status(200).json(events)
+        } else {
+            return res.status(404).send('No events found')
+        }
+    } catch (error) {
+        return res.status(500).send(error.message)
+    }
+}
+
 module.exports = {
     getEvents,
     getOneEvent,
@@ -165,5 +183,6 @@ module.exports = {
     deleteEvent,
     joinEvent,
     quitEvent,
-    searchEvent
+    searchEvent,
+    getCreatedEvents
 }
