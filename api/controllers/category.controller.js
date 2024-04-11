@@ -91,12 +91,12 @@ const addEventCategory = async (req, res) => {
             if (res.locals.user.id !== event.userId && res.locals.user.role !== 'admin') return res.status(401).send('User not authorized')
             await event.addCategory(category)
 
-            return res.status(200).send({event, category})
+            if (!req.params.avoidResponse) res.status(200).send({event, category})
         } else {
-            return res.status(404).send('Event not found')
+            if (!req.params.avoidResponse) res.status(404).send('Event not found')
         }
     } catch (error) {
-        return res.status(500).send(error.message)
+        if (!req.params.avoidResponse) res.status(500).send(error.message)
     }
 }
 

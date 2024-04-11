@@ -37,7 +37,8 @@ const createEvent = async (req, res) => {
         const createdEvent = await EventModel.create(event)
         await addEventCategory({ params: {
             eventId: createdEvent.id,
-            categoryId: event.category
+            categoryId: event.category,
+            avoidResponse: true,
         } }, res)
 
         res.status(200).json(createdEvent)
