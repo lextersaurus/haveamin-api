@@ -1,6 +1,7 @@
 const EventModel = require('../models/event.model')
 const UserModel = require('../models/user.model')
 const { Op } = require('sequelize')
+const { addEventCategory } = require('./category.controller')
 
 const getEvents = async (req, res) => {
     try {
@@ -33,7 +34,11 @@ const createEvent = async (req, res) => {
             userId: res.locals.user.id,
         }
 
-        await EventModel.create(event)
+        const createdEvent = await EventModel.create(event)
+        await addEventCategory({ params: {
+            eventId: createdEvent.id,
+            categoryId: event.category
+        } }, res)
 
         res.status(200).json('Event created')
     } catch (error) {
