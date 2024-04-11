@@ -29,6 +29,9 @@ const EventModel = sequelize.define('event',
         isFree: {
             type: DataTypes.BOOLEAN,
             allowNull: false
+        },
+        description: {
+            type: DataTypes.STRING,
         }
     },
     { timestamps: false }
