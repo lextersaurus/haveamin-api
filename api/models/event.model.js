@@ -31,7 +31,7 @@ const EventModel = sequelize.define('event',
             allowNull: false
         },
         description: {
-            type: DataTypes.STRING,
+            type: DataTypes.TEXT,
         }
     },
     { timestamps: false }
