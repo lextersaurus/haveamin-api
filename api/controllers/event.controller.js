@@ -40,7 +40,7 @@ const createEvent = async (req, res) => {
             categoryId: event.category
         } }, res)
 
-        res.status(200).json('Event created')
+        res.status(200).json(createdEvent)
     } catch (error) {
         res.status(500).send('Error creating event')
     }
@@ -83,7 +83,7 @@ const deleteEvent = async (req, res) => {
         })
 
         if (event) {
-            return res.status(200).json('Event deleted')
+            return res.status(200).json(selectedEvent)
         } else {
             return res.status(404).send('Event not found')
         }
