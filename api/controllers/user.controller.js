@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt')
 const getUsers = async (req, res) => {
     try {
         const users = await UserModel.findAll({
-            attributes: { exclude: ['id', 'email', 'password', 'role'] }
+            attributes: { exclude: ['email', 'password', 'role'] }
         })
 
         res.status(200).json(users)
@@ -17,7 +17,7 @@ const getUsers = async (req, res) => {
 const getOneUser = async (req, res) => {
     try {
         const user = await UserModel.findByPk(req.params.id, {
-            attributes: { exclude: ['id', 'email', 'password', 'role'] }
+            attributes: { exclude: ['email', 'password', 'role'] }
         })
 
         if (user) {
@@ -32,7 +32,7 @@ const getOneUser = async (req, res) => {
 const getUserLogged = async (req, res) => {
     try {
         const user = await UserModel.findByPk( res.locals.user.id, {
-            attributes: { exclude: ['id', 'email', 'password', 'role'] }
+            attributes: { exclude: ['email', 'password', 'role'] }
         })
 
         if (user) {
