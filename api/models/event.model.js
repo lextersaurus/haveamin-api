@@ -32,6 +32,9 @@ const EventModel = sequelize.define('event',
         },
         description: {
             type: DataTypes.TEXT,
+        },
+        addressUrl: {
+            type: DataTypes.TEXT,
         }
     },
     { timestamps: false }
